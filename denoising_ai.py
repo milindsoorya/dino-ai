@@ -8,6 +8,7 @@ from patchify import patchify, unpatchify
 import matplotlib.pyplot as plt
 from PIL import Image
 import keras
+import random
 
 st.set_page_config(page_title="Denoising Ai",
                    page_icon="📸",
@@ -97,12 +98,33 @@ def prediction(img):
     ax[1].get_yaxis().set_visible(False)
     ax[1].title.set_text("Predicted Image")
 
+    # Preparing the image for image compare component
+    img = Image.fromarray((img).astype(np.uint8))
+    pred_img = Image.fromarray((pred_img * 255).astype(np.uint8))
+
+    image_compare(img, pred_img)
+
     st.pyplot(fig)
     progress_bar.progress(100)
     st.write('Time taken for prediction :',
              str(round(end-start, 3))+' seconds')
     progress_bar.empty()
     state.text('\n Completed!')
+
+
+def image_compare(img1, img2):
+    # Streamlit Image-Comparison Component Example
+    # https://github.com/fcakyon/streamlit-image-comparison
+    import streamlit as st
+    from streamlit_image_comparison import image_comparison
+
+    # render image-comparison
+    image_comparison(
+        img1=img1,
+        img2=img2,
+        label1="Noisy Image",
+        label2="Denoised Image",
+    )
 
 
 if __name__ == "__main__":

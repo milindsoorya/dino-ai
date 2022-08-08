@@ -4,5 +4,4 @@ opencv-python-headless
 patchify
 matplotlib
 keras
-
-
+streamlit-image-comparison

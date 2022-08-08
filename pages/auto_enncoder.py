@@ -14,6 +14,8 @@ import torch
 import torch.nn.functional as F
 import random
 
+from PIL import Image
+
 
 st.set_page_config(page_title="Denoising Ai",
                    page_icon="📸",
@@ -128,11 +130,36 @@ def prediction(img):
     ax[1].title.set_text("Predicted Image")
 
     st.pyplot(fig)
+
+    noisy_image = np.squeeze(x_test_noisy[index])
+    pred_image = np.squeeze(pred_img[index])
+
+    img1 = Image.fromarray((noisy_image).astype(np.uint8))
+    img2 = Image.fromarray((pred_image).astype(np.uint8))
+
+    print(x_test_noisy[index].shape,
+          pred_img[index].shape)
+
+    image_compare(img1, img2)
+
     progress_bar.progress(100)
     st.write('Time taken for prediction :',
              str(round(end-start, 3))+' seconds')
     progress_bar.empty()
     state.text('\n Completed!')
+
+
+def image_compare(img1, img2):
+    # Streamlit Image-Comparison Component Example
+    # https://github.com/fcakyon/streamlit-image-comparison
+    import streamlit as st
+    from streamlit_image_comparison import image_comparison
+
+    # render image-comparison
+    image_comparison(
+        img1=img1,
+        img2=img2,
+    )
 
 
 if __name__ == "__main__":
