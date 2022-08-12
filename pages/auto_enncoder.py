@@ -49,7 +49,7 @@ def models():
                 st.text('Please upload the image')
 
     if selection == 'Predict on sample Images':
-        option = st.selectbox('Select a sample image', ('<select>', 'Zero'))
+        option = st.selectbox('Select a sample image', ('<select>', 'Mnist'))
         if option == '<select>':
             pass
         else:
@@ -78,8 +78,6 @@ def prediction(img):
         f'\n Please wait while Auto encoder denoise the image.....')
     progress_bar = st.progress(0)
     start = time.time()
-
-    # TODO: Select random image
 
     # Load the data
     (x_train, _), (x_test, _) = mnist.load_data()
@@ -116,6 +114,7 @@ def prediction(img):
     progress_bar.progress(70)
     end = time.time()
 
+    # TODO: Select random image
     index = random.randint(0, len(x_test_noisy))
 
     fig, ax = plt.subplots(1, 2, figsize=(10, 10))
