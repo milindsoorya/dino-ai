@@ -8,7 +8,7 @@ import mlflow
 from mlflow.tracking import MlflowClient
 # from ml.train import Trainer --
 from ml.train_auto_new import Trainer
-# from ml.models import LinearModel --
+# from ml.models import  --
 # from ml.models import Autoencoder
 from ml.auto_encoder import Encoder, Decoder
 from ml.data import load_mnist_data

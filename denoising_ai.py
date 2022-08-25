@@ -47,7 +47,15 @@ def models():
         else:
             path = os.path.join(os.getcwd(), 'NoisyImage/')
             nsy_img = cv2.imread(path+option+'.jpg')
-            prediction(nsy_img)
+
+            # Model selector
+            model_name = st.selectbox("Please choose a pre-trained model", [
+                "<Select>", "RidNet", "DivNoising", "APBSN", "Noise2Void"])
+
+            if model_name == '<select>':
+                pass
+            else:
+                model_selector(nsy_img, model_name)
 
 
 def patches(img, patch_size):
@@ -57,16 +65,27 @@ def patches(img, patch_size):
 # st.cache
 
 
-def get_model():
-    RIDNet = tf.keras.models.load_model('./models/RIDNet.h5')
-    return RIDNet
+def model_selector(nsy_img, model_name):
+    st.write(f'The selected model is {model_name}')
+
+    btn_status = st.button('Start denoising')
+    if btn_status:
+        prediction(nsy_img, model_name)
 
 
-def prediction(img):
+def get_model(model_name):
+    if model_name.lower() == 'ridnet':
+        RIDNet = tf.keras.models.load_model('./models/RIDNet.h5')
+        return RIDNet
+    else:
+        st.text('\n WORK IN PROGRES')
+
+
+def prediction(img, model_name):
     state = st.text('\n Please wait while the model denoise the image.....')
     progress_bar = st.progress(0)
     start = time.time()
-    model = get_model()
+    model = get_model(model_name)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     nsy_img = cv2.resize(img, (1024, 1024))
     nsy_img = nsy_img.astype("float32") / 255.0
@@ -103,8 +122,8 @@ def prediction(img):
     pred_img = Image.fromarray((pred_img * 255).astype(np.uint8))
 
     image_compare(img, pred_img)
-
-    st.pyplot(fig)
+    download_prediction(pred_img)
+    # st.pyplot(fig)
     progress_bar.progress(100)
     st.write('Time taken for prediction :',
              str(round(end-start, 3))+' seconds')
@@ -124,6 +143,20 @@ def image_compare(img1, img2):
         img2=img2,
         label1="Noisy Image",
         label2="Denoised Image",
+    )
+
+
+def download_prediction(pred_img):
+    from io import BytesIO
+    buf = BytesIO()
+    pred_img.save(buf, format="png")
+    byte_im = buf.getvalue()
+
+    btn = st.download_button(
+        label="Download Image",
+        data=byte_im,
+        file_name="denoised_image.png",
+        mime="image/png",
     )
 
 
