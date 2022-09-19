@@ -139,7 +139,7 @@ def prediction(img):
     print(x_test_noisy[index].shape,
           pred_img[index].shape)
 
-    image_compare(img1, img2)
+    # image_compare(img1, img2)
 
     progress_bar.progress(100)
     st.write('Time taken for prediction :',

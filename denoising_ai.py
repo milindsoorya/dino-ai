@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import keras
 import random
+from utils import PSNR
 
 st.set_page_config(page_title="Denoising Ai",
                    page_icon="📸",
@@ -35,7 +36,7 @@ def models():
                 file_bytes = np.asarray(
                     bytearray(image.read()), dtype=np.uint8)
                 nsy_img = cv2.imdecode(file_bytes, 1)
-                prediction(nsy_img)
+                prediction(nsy_img, "ridnet")
             else:
                 st.text('Please upload the image')
 
@@ -116,6 +117,8 @@ def prediction(img, model_name):
     ax[1].get_xaxis().set_visible(False)
     ax[1].get_yaxis().set_visible(False)
     ax[1].title.set_text("Predicted Image")
+
+    st.write('PSNR:', PSNR(img, pred_img))
 
     # Preparing the image for image compare component
     img = Image.fromarray((img).astype(np.uint8))
