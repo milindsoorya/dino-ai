@@ -5,3 +5,4 @@ patchify
 matplotlib
 keras
 streamlit-image-comparison
+opencv-python
